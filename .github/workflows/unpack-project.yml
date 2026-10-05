@@ -1,0 +1,35 @@
+name: Extract Flutter Project
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download repository
+        uses: actions/checkout@v4
+
+      - name: Extract project
+        run: |
+          unzip -o WG_Keys_SF2_Player_2_1_GITHUB_CODEMAGIC.zip
+          rm WG_Keys_SF2_Player_2_1_GITHUB_CODEMAGIC.zip
+
+      - name: Verify
+        run: |
+          ls -la
+          test -d android
+          test -d lib
+          test -f pubspec.yaml
+
+      - name: Save project
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Extract Flutter project"
+          git push
